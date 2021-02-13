@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 class FirstTimersApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void initTest() {
+		assert true;
 	}
 
 }

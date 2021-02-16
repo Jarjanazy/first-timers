@@ -35,9 +35,25 @@ public class PostService {
         return ResponseEntity.ok().build();
     }
 
+    public ResponseEntity<?> updatePost(Post updatedPost){
+        postRepository.
+                findById(updatedPost.getId()).
+                map(Optional::ofNullable).
+                defaultIfEmpty(Optional.empty()).
+                doOnSuccess(oldPost -> checkAndUpdatePost(oldPost, updatedPost)).
+                subscribe();
+        return ResponseEntity.ok().build();
+    }
+
+    private void checkAndUpdatePost(Optional<Post> oldPost, Post updatedPost) {
+        oldPost.ifPresentOrElse(
+                oldP -> postRepository.save(updatedPost).subscribe(),
+                () -> log.info(String.format("%s Post doesn't exist", updatedPost.getId())));
+    }
+
     private void checkAndDeletePost(Optional<Post> post, String id) {
         post.ifPresentOrElse(
                 postRepository::delete,
-                () -> log.error(String.format("%s post doesn't exist", id)));
+                () -> log.info(String.format("%s Post doesn't exist", id)));
     }
 }

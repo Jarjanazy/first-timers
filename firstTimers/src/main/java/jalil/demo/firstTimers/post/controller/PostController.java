@@ -27,4 +27,9 @@ public class PostController {
     public ResponseEntity<?> deletePost(@RequestBody String id){
         return postService.deletePost(id);
     }
+
+    @PatchMapping("/post")
+    public ResponseEntity<?> updatePost(@RequestBody Post post){
+        return postService.updatePost(post);
+    }
 }

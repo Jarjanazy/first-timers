@@ -3,10 +3,8 @@ package jalil.demo.firstTimers.post.controller;
 import jalil.demo.firstTimers.post.entity.Post;
 import jalil.demo.firstTimers.post.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -23,5 +21,10 @@ public class PostController {
     @PostMapping("/post")
     public Mono<Post> addNewPost(@RequestBody Post postFromClient){
         return postService.addNewPost(postFromClient);
+    }
+
+    @DeleteMapping("/post")
+    public ResponseEntity<?> deletePost(@RequestBody String id){
+        return postService.deletePost(id);
     }
 }

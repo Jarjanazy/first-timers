@@ -18,6 +18,11 @@ public class PostController {
         return postService.getAllPosts();
     }
 
+    @GetMapping("/post/{id}")
+    public Mono<Post> getPostById(String id){
+        return postService.getPostById(id);
+    }
+
     @PostMapping("/post")
     public Mono<Post> addNewPost(@RequestBody Post postFromClient){
         return postService.addNewPost(postFromClient);

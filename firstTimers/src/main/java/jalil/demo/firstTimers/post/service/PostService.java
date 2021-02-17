@@ -56,4 +56,9 @@ public class PostService {
                 postRepository::delete,
                 () -> log.info(String.format("%s Post doesn't exist", id)));
     }
+
+    public Mono<Post> getPostById(String id) {
+        return postRepository.findById(id);
+    }
+
 }

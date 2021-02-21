@@ -19,7 +19,7 @@ public class PostController {
     }
 
     @GetMapping("/post/{id}")
-    public Mono<Post> getPostById(String id){
+    public Mono<ResponseEntity<?>> getPostById(@PathVariable String id){
         return postService.getPostById(id);
     }
 

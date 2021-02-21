@@ -57,8 +57,10 @@ public class PostService {
                 () -> log.info(String.format("%s Post doesn't exist", id)));
     }
 
-    public Mono<Post> getPostById(String id) {
-        return postRepository.findById(id);
+    public Mono<ResponseEntity<?>> getPostById(String id) {
+        return postRepository.
+                findById(id).
+                map(ResponseEntity::ok);
     }
 
 }

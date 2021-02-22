@@ -17,8 +17,11 @@ public class RouterFunctionConfig {
     @Bean
     public RouterFunction<ServerResponse> router(PostHandler postHandler){
         return RouterFunctions.
-                route(GET("functional/post").
+                route(GET("functional/greeting").
                         and(accept(MediaType.APPLICATION_JSON)),
-                        postHandler::postHandler);
+                        postHandler::greeting)
+                .andRoute(GET("functional/post").
+                                and(accept(MediaType.APPLICATION_JSON)),
+                        postHandler::getPosts);
     }
 }

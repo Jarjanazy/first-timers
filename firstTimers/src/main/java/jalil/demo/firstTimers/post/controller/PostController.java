@@ -19,7 +19,7 @@ public class PostController {
     }
 
     @GetMapping("/post/{id}")
-    public Mono<ResponseEntity<Object>> getPostById(@PathVariable String id){
+    public Mono<Post> getPostById(@PathVariable String id){
         return postService.getPostById(id);
     }
 
@@ -29,12 +29,12 @@ public class PostController {
     }
 
     @DeleteMapping("/post")
-    public ResponseEntity<?> deletePost(@RequestBody String id){
+    public Mono<ResponseEntity<Object>> deletePost(@RequestBody String id){
         return postService.deletePost(id);
     }
 
     @PatchMapping("/post")
-    public ResponseEntity<?> updatePost(@RequestBody Post post){
+    public Mono<ResponseEntity<Object>> updatePost(@RequestBody Post post){
         return postService.updatePost(post);
     }
 }

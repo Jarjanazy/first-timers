@@ -25,24 +25,22 @@ public class PostService {
         return postRepository.save(postFromClient);
     }
 
-    public ResponseEntity<?> deletePost(String id) {
-        postRepository.
+    public Mono<ResponseEntity<Object>> deletePost(String id) {
+        return postRepository.
                 findById(id).
-                map(Optional::ofNullable).
-                defaultIfEmpty(Optional.empty()).
+                map(Optional::ofNullable).// => those two lines allows us to return an Mono<Optional> instead of null
+                defaultIfEmpty(Optional.empty()).// =>
                 doOnSuccess(post -> checkAndDeletePost(post, id)).
-                subscribe();
-        return ResponseEntity.ok().build();
+                thenReturn(ResponseEntity.ok().build());
     }
 
-    public ResponseEntity<?> updatePost(Post updatedPost){
-        postRepository.
+    public Mono<ResponseEntity<Object>> updatePost(Post updatedPost){
+        return postRepository.
                 findById(updatedPost.getId()).
                 map(Optional::ofNullable).
                 defaultIfEmpty(Optional.empty()).
                 doOnSuccess(oldPost -> checkAndUpdatePost(oldPost, updatedPost)).
-                subscribe();
-        return ResponseEntity.ok().build();
+                thenReturn(ResponseEntity.ok().build());
     }
 
     private void checkAndUpdatePost(Optional<Post> oldPost, Post updatedPost) {
@@ -53,15 +51,12 @@ public class PostService {
 
     private void checkAndDeletePost(Optional<Post> post, String id) {
         post.ifPresentOrElse(
-                postRepository::delete,
+                p -> postRepository.delete(p).subscribe(),
                 () -> log.info(String.format("%s Post doesn't exist", id)));
     }
 
-    public Mono<ResponseEntity<Object>> getPostById(String id) {
-        return postRepository.
-                findById(id).
-                map(post -> ResponseEntity.ok().build()).
-                switchIfEmpty(Mono.just(ResponseEntity.badRequest().body(String.format("%s Post isn't found", id))));
+    public Mono<Post> getPostById(String id) {
+        return postRepository.findById(id);
     }
 
 }
